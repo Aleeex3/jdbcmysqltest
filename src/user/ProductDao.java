@@ -1,4 +1,4 @@
-package test;
+package user;
 
 // product table data access object
 

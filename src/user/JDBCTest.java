@@ -1,4 +1,4 @@
-package test;
+package user;
 
 import java.security.Identity;
 import java.sql.Connection;
