@@ -1,79 +1,149 @@
+/**
+ * 
+ */
 package user;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+
+import model.User;
 
 /**
- * data access object for user table PC-ProfesorCVE 25 sept 2025
+ * data access object for user table
  */
 public class UserDao {
-	public void insert(String name, String password, int id, boolean isVIP) {
-		String insertSQL = "insert into users values ( " + "'?'," + "'?'," + "? " + "?)";
+	public void insert(int id, String name, Integer age, String email, String password, boolean Vip) {
+		String insertSQL = "insert into users values(?, ?, ?, ?, ?, ?)";
+
 		Connection connection = DBHelper.getConnection();
 		try {
 			PreparedStatement ps = connection.prepareStatement(insertSQL);
-			ps.setString(1, name);
-			ps.setString(2, password);
-			ps.setInt(3, id);
-			ps.setBoolean(4, isVIP);
-
+			/**
+			 * La instancia/objeto de la clase PreparedStatement se encarga de sustituir los
+			 * placeholders ? con los valores pasados a traves de los parametros, de manera
+			 * que nos permite reutilizar el codigo aun más.
+			 */
+			ps.setInt(1, id);// Sustituye el primer placeholder con el valor de id
+			ps.setString(2, name);// Sustituye el segundo placeholder con el valor de name
+			ps.setInt(3, age);// Sustituye el tercer placeholder con el valor de age
+			ps.setString(4, email);// Sustituye el cuerto placeholder con el valor de email
+			ps.setString(5, password);// Sustituye el quinto placeholder con el valor de password
+			ps.setBoolean(6, Vip);// Sustituye el sexto placeholder con el vaor de Vip
+			// Si nos devuelve 0 significa que no a cambiado ninguna fila en la base de
+			// datos
 			int result = ps.executeUpdate();
-			System.out.println("insert rows" + result);	
+			System.out.println("Insert rows " + result);
+			// Close the conecction with the database
+			ps.close();
 			connection.close();
-			} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-
-		}
-
-	}
-	public void delete(long id) {
-		String deleteSQL = "DELETE FROM users WHERE id =`12´";
-
-	
-		
-	}
-	
-	public void update (int id, String email) {
-		
-	}
-	public void findAll() {
-		String selectSQL = " select * from users where name ='alex'";
-		Connection connection = null;
-		PreparedStatement ps = null;
-		try {
-			ps = connection.prepareStatement(selectSQL);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		ResultSet resultSet = null;
+
+	}
+
+	/*
+	 * Tenemos que determinar que input o entradas tenemos que proporcionar a este
+	 * metodo, y que es lo que nos debe devolver como resultado
+	 */
+	public void delete(int id) {
+		String deleteSQL = "DELETE FROM users WHERE id = ?";
+
+		Connection connection = DBHelper.getConnection();
 		try {
-			resultSet = ps.executeQuery();
+			PreparedStatement ps = connection.prepareStatement(deleteSQL);
+			ps.setInt(1, id);
+			int result = ps.executeUpdate();
+			System.out.println("Delete rows " + result);
+			connection.close();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+
+	}
+
+	public void update(int id, String email) {
+		String updateSQL= "update user set email = ? where id = ?";
+		try (Connection connection = DBHelper.getConnection();
+			PreparedStatement ps = connection.prepareStatement(updateSQL);){
+			ps.setString(1, email);
+			ps.setInt(2, id);
+			int result = ps.executeUpdate();
+			System.out.println("updated rows " + result);
+			connection.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+	}
+
+	public ArrayList findAll() {
 		
+		String selecSQL = "SELECT * FROM users where name = 'Alejandro' ";
+		User[] users;
+		ArrayList<User> userList = new ArrayList<User>();
+		userList.add(null);
+		Connection connection = DBHelper.getConnection();
 		try {
+			PreparedStatement ps = connection.prepareStatement(selecSQL);
+			ResultSet resultSet = ps.executeQuery();
+//			System.out.println("Total rows is " + resultSet.last());
+//			System.out.println("rows = " + resultSet.getFetchSize());
 			while (resultSet.next()) {
+				
 				int id = resultSet.getInt("id");
 				String name = resultSet.getString("name");
-				boolean isVip = resultSet.getBoolean("isVIP");
-				System.out.println("record > id = " + id + "name = "+ name + "isVIP = "+ isVip);
+				int age = resultSet.getInt("age");
+				String email = resultSet.getString("email");
+				String password = resultSet.getString("password");
+				boolean Vip = resultSet.getBoolean("Vip");
+				System.out.println("record > id = " + id + " name = " + name + " IsVip = " + Vip);
+				userList.add(new User(name, age, email, password, id, Vip));
 			}
+			
+			return userList;
+			
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
+		return null;
+
 	}
+
+	public User find(int id) {
 		
+		String selecSQL = "SELECT * FROM users where name = 'Alejandro' ";
 		
-	
-	public void insert(int i, Object object, int j, Object object2, Object object3, boolean b) {
-		// TODO Auto-generated method stub
+		try(Connection connection = DBHelper.getConnection();
+				PreparedStatement ps = connection.prepareStatement(selecSQL);) {
+			ps.setInt(1, id);
+			ResultSet resultSet = ps.executeQuery();
+//			System.out.println("Total rows is " + resultSet.last());
+//			System.out.println("rows = " + resultSet.getFetchSize());
+			if (resultSet.next()) {
+				
+				String name = resultSet.getString("name");
+				int age = resultSet.getInt("age");
+				String email = resultSet.getString("email");
+				String password = resultSet.getString("password");
+				boolean Vip = resultSet.getBoolean("Vip");
+				System.out.println("record > id = " + id + " name = " + name + " IsVip = " + Vip);
+				resultSet.close();
+				return new User(name, age, email, password, id, Vip);
+			}
+						
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 		
+		return  null;
+
 	}
 }

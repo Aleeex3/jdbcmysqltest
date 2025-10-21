@@ -10,8 +10,8 @@ public class User {
 //Los atributos de ...
 	private long id;
 
-	public User(long id, String name) {
-		this.name = name;
+	public User(long id, String string) {
+		this.name = string;
 	}
 
 	public boolean isVIP() {
@@ -54,7 +54,7 @@ public class User {
 		this.id = id;
 	}
 
-	public User() {
+	public User(String name2, int age, String email2, String password2, int id2, boolean vip) {
 	}
 
 }
