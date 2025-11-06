@@ -39,7 +39,8 @@ public class JDBCTest {
 
 			PreparedStatement ps1 = connection.prepareStatement(createSQL);
 			ps1.execute();
-			String insertSQL = "insert into users values ( " + "'alex'," + "'admin'," + "1, " + "12)";
+			String insertSQL = "insert into users values ( " + "'alex'," + "'admin'," + "1, " + "12," + "0)";
+
 			ps1 = connection.prepareStatement(insertSQL);
 			ps1.execute();
 			// Sirve para borrar una linea de datos

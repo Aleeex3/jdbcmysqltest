@@ -15,12 +15,12 @@ public class UserDaoTest {
 	
 	public static void main(String[] args) {
 		UserDao userDao = new UserDao();
-		//userDao.insert(0, null, 10, null, null, false);
+		userDao.insert(4, "aday" , 15, "kfkfkfkf@gmail.com", "gfgf",true, 980);
 		//userDao.delete(0);
 		ArrayList<User> users = userDao.findAll();	
 		System.out.println(users.size());
-		userDao.update(10, "arg@gmail.com");
-		
+		//userDao.update(10, "arg@gmail.com");
+      //   userDao.transferWithQueryAndUpdate();
 	} 
 	
 }
