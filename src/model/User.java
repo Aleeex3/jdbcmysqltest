@@ -57,4 +57,15 @@ public class User {
 	public User(String name2, int age, String email2, String password2, int id2, boolean vip) {
 	}
 
+    public int getAge() {
+        return 0;
+    }
+
+    public boolean isVip() {
+        return false;
+    }
+
+    public float getBalance() {
+        return 0;
+    }
 }

@@ -30,4 +30,9 @@ public interface UserDaoInterface {
     public boolean transferWithQueryAndUpdate(int fromUserId, int toUserId, float amount);
 
 
+    boolean transferWithBatch(long fromUserId, long toUserId, float amount);
+
+    boolean transferWithQueryAndUpdate(long fromUserId, long toUserId, float amount);
+
+    boolean transferWithTransaction(long FromUserId, long toUserId, float amount);
 }

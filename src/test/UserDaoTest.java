@@ -15,7 +15,7 @@ public class UserDaoTest {
 	
 	public static void main(String[] args) {
 		UserDao userDao = new UserDao();
-		userDao.insert(4, "aday" , 15, "kfkfkfkf@gmail.com", "gfgf",true, 980);
+		userDao.insert(4, "aday" , 15, "kfkfkfkf@gmail.com", "gfgf",true);
 		//userDao.delete(0);
 		ArrayList<User> users = userDao.findAll();	
 		System.out.println(users.size());
