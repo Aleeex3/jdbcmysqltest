@@ -8,32 +8,40 @@ import java.util.ArrayList;
 import user.UserDao;
 
 /**
- * @author hugog10 oct 2025
+ * @author  10 oct 2025
  */
 public class ParallelAccessSimulation {
-
     public static void main(String[] args) {
-
-        // creamos un objeto que se pueda conectar a la clase UserDao
         UserDao userDao = new UserDao();
-        int fromUserId = 4;
-        int toUserId = 5;
-// creamos una lista con 100 espacios de capacidad
-        ArrayList<Thread> threads;
-        threads = new ArrayList<Thread>(100);
-// bucle que sirve para añadir 100 hilos en la capacidad de la lista a este threads.add(thread);
-        // porque el otro solo recorre las 100 posiciones
-        for (int i = 0; i < 100; i++) {
-            // creacion de hilo
-            // () -> {} = hace que el codigo sea mas flexible
-            Thread thread = new Thread(() -> {
-                userDao.transferWithTransaction(fromUserId, toUserId, 1);
-            });
+        long fromUserId = 1;
+        long toUserId = 2;
+        ArrayList<Thread> threads = new ArrayList<Thread>(100);
+        System.out.println(threads.size());
+//		for (int i = 0; i < 10; i++) {
+//			Thread thread = new Thread(() -> {
+//                for (int j = 0; j < 10; j++) {
+//                    userDao.transferWithQueryAndUpdate(fromUserId, toUserId, 1);
+//                }
+//			});
+        System.out.println("number of processors = " + Runtime.getRuntime().availableProcessors());
+        for (int i = 0; i < Runtime.getRuntime().availableProcessors(); i++){
+            Thread thread = new Thread(
+                    () -> {
+                        for (int j = 0; j < 10; j++){
+//                            userDao.transferWithTransaction(fromUserId, toUserId, 1);
+//                            userDao.transferWithTransaction(toUserId, fromUserId, 1);
+                            userDao.transferWithTransactionWithoutDeadlock(fromUserId, toUserId, 1);
+                            userDao.transferWithTransactionWithoutDeadlock(toUserId, fromUserId, 1);
+                        }
+                    }
+            );
             threads.add(thread);
-
         }
+
+
         for (Thread thread : threads) {
             thread.start();
+
         }
     }
 }

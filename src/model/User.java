@@ -14,7 +14,10 @@ public class User {
 		this.name = string;
 	}
 
-	public boolean isVIP() {
+    public User(String name, int age, String email, String password, int id, boolean vip, float balance) {
+    }
+
+    public boolean isVIP() {
 		return isVIP;
 	}
 
